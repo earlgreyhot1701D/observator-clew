@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Observator Clew — Estate Overview</title>
+  <style>
+    :root{--ink:#080808;--red:#E6392D;--blue:#1E5FBF;--yellow:#F4C430;--ivory:#F7F4ED;--slate:#6B7280;--line:1px solid rgba(8,8,8,.18)}
+
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--ivory);color:var(--ink)}
+    body{font-family:"Helvetica Neue",Arial,sans-serif;line-height:1.45}
+    main{width:min(100% - 24px,720px);margin:auto;padding:16px 0 48px}
+
+    header{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:14px}
+    header img{width:44px;height:44px;display:block}
+    .name{font-weight:800;letter-spacing:.08em;font-size:18px}
+    .tagline{margin-top:3px;color:var(--slate);font-size:12px}
+
+    .funnel{display:grid;grid-template-columns:1fr;gap:0;border:2px solid var(--ink);margin:20px 0}
+    .cell{padding:16px;border-bottom:var(--line)}
+    .cell:last-child{border-bottom:0}
+    .cell .num{font-size:32px;font-weight:800;line-height:1}
+    .cell .cap{font-size:10px;letter-spacing:.15em;font-weight:800;color:var(--slate);margin-top:8px}
+
+    section{margin:24px 0}
+    h2{font-size:20px;letter-spacing:-.01em;margin:0 0 14px;border-bottom:2px solid var(--ink);padding-bottom:8px}
+
+    .card{border:2px solid var(--ink);padding:16px}
+    .block{padding:12px 0;border-bottom:var(--line)}
+    .block:first-child{padding-top:0}
+    .label{font-size:10px;letter-spacing:.15em;font-weight:800;margin-bottom:6px}
+    .value{font-size:14px}
+    .reco{padding-top:12px;font-size:14px;font-weight:700}
+
+    .quiet{font-size:14px;color:var(--slate)}
+
+    footer{border-top:2px solid var(--ink);padding-top:14px;margin-top:28px;color:var(--slate);font-size:12px}
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <img src="assets/avatar-256.png" alt="Observator Clew">
+      <div>
+        <div class="name">OBSERVATOR CLEW</div>
+        <div class="tagline">Creating is becoming nearly free. Maintaining never did.</div>
+      </div>
+    </header>
+
+    <div class="funnel">
+      <div class="cell"><div class="num">00</div><div class="cap">OBSERVED</div></div>
+      <div class="cell"><div class="num">00</div><div class="cap">SIGNALED</div></div>
+      <div class="cell"><div class="num">00</div><div class="cap">INVESTIGATED</div></div>
+      <div class="cell"><div class="num">00</div><div class="cap">SURFACED</div></div>
+    </div>
+
+    <section>
+      <h2>Needs you</h2>
+      <div class="card">
+        <div class="block">
+          <div class="label">WHY THIS SURFACED</div>
+          <div class="value">[placeholder]</div>
+        </div>
+        <div class="block">
+          <div class="label">WHAT I CHECKED</div>
+          <div class="value">[placeholder]</div>
+        </div>
+        <div class="block">
+          <div class="label">WHAT I FOUND</div>
+          <div class="value">[placeholder]</div>
+        </div>
+        <div class="block">
+          <div class="label">WHAT I CAN'T KNOW</div>
+          <div class="value">[placeholder]</div>
+        </div>
+        <div class="reco">Recommendation: [placeholder]</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Quiet</h2>
+      <div class="quiet">[placeholder list]</div>
+    </section>
+
+    <footer>Last observation: [placeholder]</footer>
+  </main>
+</body>
+</html>
