@@ -48,7 +48,7 @@ SEPARATOR = "\u2500" * 10  # box-drawing rule between cards, no emoji
 
 BUTTON_LABEL_MAX = 20
 SHORT_NAME_MAX = 12
-FIELD_CHARS = 180
+FIELD_CHARS = 120
 
 
 def _truncate(text, limit=FIELD_CHARS):
@@ -119,10 +119,10 @@ def _finding_block(finding, number):
     checked_str = ", ".join(checked) if checked else "nothing"
     return (
         f"<b>{number}. {_esc(finding.repo)}</b>\n"
-        f"<i>Why this surfaced:</i> {_esc(finding.why_surfaced)}\n"
-        f"<i>What I checked:</i> <code>{_esc(checked_str)}</code>\n"
-        f"<i>What I found:</i> {_esc(_truncate(finding.what_found))}\n"
-        f"<i>What I can't know:</i> {_esc(_truncate(finding.what_cant_know))}\n"
+        f"<i>Why:</i> {_esc(finding.why_surfaced)}\n"
+        f"<i>Checked:</i> <code>{_esc(checked_str)}</code>\n"
+        f"<i>Found:</i> {_esc(_truncate(finding.what_found))}\n"
+        f"<i>Can't know:</i> {_esc(_truncate(finding.what_cant_know))}\n"
         f"<b>Recommendation: {_esc(finding.recommendation)}</b>"
     )
 
