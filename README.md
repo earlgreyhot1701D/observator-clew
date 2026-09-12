@@ -1,3 +1,5 @@
+![Observator Clew — Creating is becoming nearly free. Maintaining never did. Code is cheap. Ownership isn't.](branding/title-card.png)
+
 # Observator Clew
 
 Creating is becoming nearly free. Maintaining never did.
@@ -13,6 +15,8 @@ Repo: https://github.com/earlgreyhot1701D/observator-clew
 Estate Overview (live): https://earlgreyhot1701d.github.io/observator-clew/
 
 ## How it works
+
+![Observator Clew architecture: Observe, Signal, Investigate, Decide, Remember. No evidence means no finding. Read-only toward your software; writes only Observator decision state and the generated report.](branding/architecture-card.png)
 
 A deterministic layer scans the estate and flags candidates worth a closer look, based on how long a repo has been quiet and what signals are present. An agent investigates only those candidates, requesting evidence it actually needs, and recommends SURFACE or SUPPRESS with a reason either way. A persistence guard checks prior decisions before the agent is ever called again, so a repo you've already said "no action" on stays quiet unless something material changes (a new commit, a reopened issue, a new deploy file).
 
