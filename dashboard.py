@@ -34,10 +34,19 @@ STYLE = """    :root{--ink:#080808;--red:#E6392D;--blue:#1E5FBF;--yellow:#F4C430
     .cell .num{font-size:32px;font-weight:800;line-height:1}
     .cell .cap{font-size:10px;letter-spacing:.15em;font-weight:800;color:var(--slate);margin-top:8px}
 
+    @media(min-width:560px){
+      .funnel{grid-template-columns:repeat(4,1fr)}
+      .cell{border-bottom:0;border-right:var(--line)}
+      .cell:last-child{border-right:0}
+    }
+
     section{margin:24px 0}
     h2{font-size:20px;letter-spacing:-.01em;margin:0 0 14px;border-bottom:2px solid var(--ink);padding-bottom:8px}
 
     .card{border:2px solid var(--ink);padding:16px}
+    .repo{font-size:16px;font-weight:800;letter-spacing:-.01em;padding-bottom:10px;border-bottom:2px solid var(--ink);margin-bottom:4px;word-break:break-word}
+    .repo a{color:var(--ink);text-decoration:none}
+    .repo a:hover{color:var(--blue)}
     .block{padding:12px 0;border-bottom:var(--line)}
     .block:first-child{padding-top:0}
     .label{font-size:10px;letter-spacing:.15em;font-weight:800;margin-bottom:6px}
@@ -70,6 +79,8 @@ def _finding_card(finding):
     checked_str = ", ".join(checked) if checked else "nothing"
     return (
         '      <div class="card">\n'
+        f'        <div class="repo"><a href="https://github.com/'
+        f'{_esc(finding.repo)}">{_esc(finding.repo)}</a></div>\n'
         '        <div class="block">\n'
         '          <div class="label">WHY THIS SURFACED</div>\n'
         f'          <div class="value">{_esc(finding.why_surfaced)}</div>\n'
