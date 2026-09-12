@@ -72,37 +72,17 @@
     <div class="funnel">
       <div class="cell"><div class="num">62</div><div class="cap">OBSERVED</div></div>
       <div class="cell"><div class="num">10</div><div class="cap">SIGNALED</div></div>
-      <div class="cell"><div class="num">4</div><div class="cap">INVESTIGATED</div></div>
-      <div class="cell"><div class="num">4</div><div class="cap">SURFACED</div></div>
+      <div class="cell"><div class="num">3</div><div class="cap">INVESTIGATED</div></div>
+      <div class="cell"><div class="num">3</div><div class="cap">SURFACED</div></div>
     </div>
 
     <section>
       <h2>Needs you</h2>
       <div class="card">
-        <div class="repo"><a href="https://github.com/earlgreyhot1701D/ai-devkit">earlgreyhot1701D/ai-devkit</a></div>
-        <div class="block">
-          <div class="label">WHY THIS SURFACED</div>
-          <div class="value">Pushed 330 days before capture and deployment evidence present.</div>
-        </div>
-        <div class="block">
-          <div class="label">WHAT I CHECKED</div>
-          <div class="value">README.md (live), package.json (live), .github/workflows/npm-publish.yml (live)</div>
-        </div>
-        <div class="block">
-          <div class="label">WHAT I FOUND</div>
-          <div class="value">The repository describes the `ai-devkit` CLI for configuring Cursor and Claude Code environments, and `package.json` publishes it as the `ai-devkit` npm package. The `npm-publish.yml` workflow publishes to https://registry.npmjs.org/ when a release is created, and the repository lists https://ai-devkit.com as its homepage.</div>
-        </div>
-        <div class="block">
-          <div class="label">WHAT I CAN'T KNOW</div>
-          <div class="value">GitHub data cannot tell us whether https://ai-devkit.com is currently live or functioning; it has not been verified with network access. It also cannot tell us whether the npm publishing workflow has completed successfully for any release or whether anyone currently uses the package.</div>
-        </div>
-        <div class="reco">Recommendation: SURFACE. The quiet repository still has a release-triggered npm publishing workflow and a named homepage, so the owner may want to review whether those public distribution and web-presence paths remain intentional.</div>
-      </div>
-      <div class="card">
         <div class="repo"><a href="https://github.com/earlgreyhot1701D/clew-forge">earlgreyhot1701D/clew-forge</a></div>
         <div class="block">
           <div class="label">WHY THIS SURFACED</div>
-          <div class="value">Pushed 326 days before capture; deployment evidence present.</div>
+          <div class="value">Pushed 326 days before capture and deployment evidence present.</div>
         </div>
         <div class="block">
           <div class="label">WHAT I CHECKED</div>
@@ -110,19 +90,19 @@
         </div>
         <div class="block">
           <div class="label">WHAT I FOUND</div>
-          <div class="value">README.md describes Clew Forge as a project framework with LLM integration for Claude, ChatGPT, Copilot, and Vertex. .github/workflows/ci.yml runs GitHub Actions checks using Node 20, Python 3.12, ruff, black, and pytest on pushes and pull requests.</div>
+          <div class="value">The README describes Clew Forge as a project framework with LLM integration for Claude, ChatGPT, Copilot, and Vertex. The basic-ci GitHub Actions workflow runs Node 20 and Python 3.12 linting and test commands on pushes and pull requests, but does not name a deployment target.</div>
         </div>
         <div class="block">
           <div class="label">WHAT I CAN'T KNOW</div>
-          <div class="value">GitHub data and these files cannot verify what deployment evidence refers to, or whether any deployment is currently live or functioning.</div>
+          <div class="value">GitHub&#x27;s data and the checked files cannot identify the deployment target or verify whether any deployment is currently live or functioning.</div>
         </div>
-        <div class="reco">Recommendation: SURFACE. The repository has been quiet for 326 days despite deployment evidence, and the available workflow confirms ongoing CI configuration but does not clarify the deployment&#x27;s current state.</div>
+        <div class="reco">Recommendation: SURFACE. The long quiet period combined with established deployment evidence warrants the owner&#x27;s review because the available README and CI workflow do not clarify the deployed component or its current status.</div>
       </div>
       <div class="card">
         <div class="repo"><a href="https://github.com/earlgreyhot1701D/Ariadne-Clew">earlgreyhot1701D/Ariadne-Clew</a></div>
         <div class="block">
           <div class="label">WHY THIS SURFACED</div>
-          <div class="value">Pushed 291 days before capture with deployment evidence present.</div>
+          <div class="value">Pushed 291 days before capture and deployment evidence present.</div>
         </div>
         <div class="block">
           <div class="label">WHAT I CHECKED</div>
@@ -130,19 +110,19 @@
         </div>
         <div class="block">
           <div class="label">WHAT I FOUND</div>
-          <div class="value">The repository configures a Flask-based agent with AWS Bedrock AgentCore and Strands dependencies, and its Dockerfile runs `backend.agent` with AWS region `us-east-1`. GitHub Pages is indicated at https://earlgreyhot1701D.github.io/Ariadne-Clew/, while the CI workflow runs Python formatting, linting, type checks, tests, and frontend linting.</div>
+          <div class="value">The repository describes an AWS AgentCore and Bedrock reasoning agent and lists the `bedrock-agentcore` and `strands-agents` dependencies. Its Dockerfile runs `backend.agent` with AWS region `us-east-1`, and GitHub Pages is associated with https://earlgreyhot1701d.github.io/Ariadne-Clew/.</div>
         </div>
         <div class="block">
           <div class="label">WHAT I CAN'T KNOW</div>
-          <div class="value">GitHub data cannot tell whether https://earlgreyhot1701D.github.io/Ariadne-Clew/ is currently live or functioning; it has not been verified because there is no network access or site-checking tool. It also cannot show whether the AWS Bedrock AgentCore integration has valid credentials or is currently being used.</div>
+          <div class="value">GitHub data and these files cannot tell whether the AWS AgentCore/Bedrock integration is currently configured with usable credentials or functioning. I have not verified whether https://earlgreyhot1701d.github.io/Ariadne-Clew/ is currently live or functioning; I have no network access to that site or a tool to check it.</div>
         </div>
-        <div class="reco">Recommendation: SURFACE. The quiet repository has a GitHub Pages deployment target and configured AWS Bedrock AgentCore integration, making its current operational status worth the owner&#x27;s attention.</div>
+        <div class="reco">Recommendation: SURFACE. The combination of a quiet repository, GitHub Pages evidence, and an AWS AgentCore/Bedrock-backed service makes its current deployment and integration status worth the owner&#x27;s attention.</div>
       </div>
       <div class="card">
         <div class="repo"><a href="https://github.com/earlgreyhot1701D/janus-clew">earlgreyhot1701D/janus-clew</a></div>
         <div class="block">
           <div class="label">WHY THIS SURFACED</div>
-          <div class="value">pushed 285 days before capture; deployment evidence present</div>
+          <div class="value">Pushed 285 days before capture and deployment evidence present.</div>
         </div>
         <div class="block">
           <div class="label">WHAT I CHECKED</div>
@@ -150,13 +130,13 @@
         </div>
         <div class="block">
           <div class="label">WHAT I FOUND</div>
-          <div class="value">Janus Clew is configured to use AWS Bedrock AgentCore: .env.example names AGENTCORE_AGENT_ID and AGENTCORE_AGENT_ALIAS, while requirements.txt includes bedrock-agentcore and strands-agents. The Dockerfile runs backend.agent with OpenTelemetry instrumentation and AWS_REGION set to us-east-1.</div>
+          <div class="value">Janus Clew is configured to use AWS Bedrock AgentCore through the `bedrock-agentcore` and `strands-agents` dependencies, with `AGENTCORE_AGENT_ID` and `AGENTCORE_AGENT_ALIAS` settings in `.env.example`. Its Dockerfile runs `backend.agent` with OpenTelemetry instrumentation and exposes ports 9000, 8000, and 8080.</div>
         </div>
         <div class="block">
           <div class="label">WHAT I CAN'T KNOW</div>
-          <div class="value">GitHub data cannot tell whether the configured AWS Bedrock AgentCore agent is currently deployed, reachable, or functioning, nor whether the repository&#x27;s Docker image is currently running anywhere.</div>
+          <div class="value">GitHub data cannot tell whether the configured AWS Bedrock AgentCore agent is currently deployed, live, or functioning, nor whether any credentials or deployment settings are current.</div>
         </div>
-        <div class="reco">Recommendation: SURFACE. The quiet repository retains explicit AWS Bedrock AgentCore configuration and a Docker runtime entrypoint, so its external-service configuration merits the owner&#x27;s attention.</div>
+        <div class="reco">Recommendation: SURFACE. The quiet repository contains a configured AWS Bedrock AgentCore integration and Docker runtime setup that may warrant an owner check.</div>
       </div>
     </section>
 
@@ -164,9 +144,10 @@
       <h2>Quiet</h2>
       <div class="label">YOU ALREADY DECIDED THESE</div>
       <div class="value">earlgreyhot1701D/team-110-customized-tutoring: No action, 2026-09-12 (evidence unchanged)</div>
+      <div class="value">earlgreyhot1701D/ai-devkit: No action, 2026-09-12 (evidence unchanged)</div>
     </section>
 
-    <footer>Last observation: Sep 12, 1:53 PM</footer>
+    <footer>Last observation: Sep 12, 2:38 PM</footer>
   </main>
 </body>
 </html>

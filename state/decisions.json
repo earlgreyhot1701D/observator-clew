@@ -11,5 +11,27 @@
         "Dockerfile"
       ]
     }
+  },
+  "earlgreyhot1701D/ai-devkit": {
+    "repo": "earlgreyhot1701D/ai-devkit",
+    "decision": "no_action",
+    "decided_at": "2026-09-12T21:36:23.003086+00:00",
+    "evidence_fingerprint": {
+      "pushed_at": "2025-10-15T20:47:58Z",
+      "archived": false,
+      "open_issues_count": 0,
+      "deploy_files": []
+    }
+  },
+  "earlgreyhot1701D/clew-forge": {
+    "repo": "earlgreyhot1701D/clew-forge",
+    "decision": "investigate",
+    "decided_at": "2026-09-12T21:45:48.460490+00:00",
+    "evidence_fingerprint": {
+      "pushed_at": "2025-10-19T23:30:19Z",
+      "archived": false,
+      "open_issues_count": 0,
+      "deploy_files": []
+    }
   }
 }
