@@ -160,6 +160,18 @@ def render_html(run_result):
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Observator Clew: Estate Overview</title>
+  <meta name="description" content="Observator watches one person's GitHub estate and decides what actually needs their attention.">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Observator Clew: Estate Overview">
+  <meta property="og:description" content="Observator watches one person's GitHub estate and decides what actually needs their attention.">
+  <meta property="og:url" content="https://earlgreyhot1701d.github.io/observator-clew/">
+  <meta property="og:image" content="https://earlgreyhot1701d.github.io/observator-clew/social-1200x630.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Observator Clew: Estate Overview">
+  <meta name="twitter:description" content="Observator watches one person's GitHub estate and decides what actually needs their attention.">
+  <meta name="twitter:image" content="https://earlgreyhot1701d.github.io/observator-clew/social-1200x630.png">
   <style>
 {STYLE}
   </style>
