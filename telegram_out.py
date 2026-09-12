@@ -48,6 +48,18 @@ SEPARATOR = "\u2500" * 10  # box-drawing rule between cards, no emoji
 
 BUTTON_LABEL_MAX = 20
 SHORT_NAME_MAX = 12
+FIELD_CHARS = 180
+
+
+def _truncate(text, limit=FIELD_CHARS):
+    """Trim to a word boundary for the Telegram card only. The full text
+    always remains on the Estate Overview page, which dashboard.py
+    renders from the same RunResult."""
+    s = str(text if text is not None else "")
+    if len(s) <= limit:
+        return s
+    cut = s[:limit].rsplit(" ", 1)[0].rstrip(" ,.;:")
+    return cut + "\u2026"
 
 
 def _local_timestamp(run_at):
@@ -91,6 +103,16 @@ def _suppressed_lines(notes):
     return lines
 
 
+def _bust(url, stamp):
+    """GitHub Pages caches for ~10 minutes. A per-run query string makes
+    each briefing's link a distinct URL, so a tap always resolves to the
+    run the reader is looking at."""
+    if not url:
+        return url
+    sep = "&" if "?" in url else "?"
+    return f"{url}{sep}r={stamp}"
+
+
 def _finding_block(finding, number):
     """The per-finding HTML block from template 1, numbered to match its buttons."""
     checked = finding.what_checked
@@ -98,9 +120,9 @@ def _finding_block(finding, number):
     return (
         f"<b>{number}. {_esc(finding.repo)}</b>\n"
         f"<i>Why this surfaced:</i> {_esc(finding.why_surfaced)}\n"
-        f"<i>What I checked:</i> {_esc(checked_str)}\n"
-        f"<i>What I found:</i> {_esc(finding.what_found)}\n"
-        f"<i>What I can't know:</i> {_esc(finding.what_cant_know)}\n"
+        f"<i>What I checked:</i> <code>{_esc(checked_str)}</code>\n"
+        f"<i>What I found:</i> {_esc(_truncate(finding.what_found))}\n"
+        f"<i>What I can't know:</i> {_esc(_truncate(finding.what_cant_know))}\n"
         f"<b>Recommendation: {_esc(finding.recommendation)}</b>"
     )
 
@@ -114,6 +136,7 @@ def build_briefing(run_result, estate_overview_url):
     """
     surfaced = run_result.surfaced[:MAX_FINDINGS_IN_BRIEFING]
     surfaced_count = len(run_result.surfaced)
+    stamp = run_stamp(run_result.run_at)
 
     lines = [
         "<b>OBSERVATOR CLEW</b>",
@@ -155,7 +178,11 @@ def build_briefing(run_result, estate_overview_url):
         )
         lines.append("")
 
-    lines.append(f'<a href="{_esc(estate_overview_url)}">View full estate</a>')
+    finding_noun = "finding" if surfaced_count == 1 else "findings"
+    lines.append(
+        f'<a href="{_esc(_bust(estate_overview_url, stamp))}">'
+        f"View full reasoning for all {surfaced_count} {finding_noun}</a>"
+    )
 
     return "\n".join(lines), id_map
 
