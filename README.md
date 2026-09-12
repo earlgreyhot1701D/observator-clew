@@ -40,11 +40,43 @@ None of the above performs the agent's job. They're the blueprint and the raw ma
 
 ## Built during the event
 
-(filled in on Sep 12. This section will list what was actually built at the hackathon: the deterministic triage layer, the agent loop calling the model above, the Telegram bot and button handling, the persistence guard and decision store, and the live Estate Overview data, so anyone can see exactly what's new versus what existed going in.)
+Everything below was written on Sep 12 during the build window. Every file in this list is new; the two files that existed before (`docs/index.html` as an empty shell, `.env.example`) were modified, and that is noted.
+
+**The deterministic layer**
+
+- **`estate.py`**: loads the snapshot and exposes it to the rest of the pipeline.
+- **`triage.py`**: age bucketing (`active`, `recent`, `quiet`, `long-quiet`, `insufficient-evidence`) and the `has_deployment_evidence` boolean, tested by file value rather than key membership. Signaled is defined as `(quiet OR long-quiet) AND has_deployment_evidence`.
+- **`schema.py`**: the Pydantic `Finding` and `RunResult` models, typed in from the prepared spec.
+
+**The agent**
+
+- **`reason.py`**: the bounded ReAct loop against `/v1/responses` with structured outputs. The model reasons, requests a file, reads the real result, and judges, at most four tool turns per candidate.
+- **`investigate.py`**: executes the model's `fetch_file` requests live against the GitHub Contents API, wraps returned content as untrusted data, and falls back to labeled snapshot presence if GitHub is unreachable.
+
+**The guards**
+
+- **`guard.py`**: `persistence_guard` (runs *before* the model, drops candidates with a stored `no_action` decision whose evidence fingerprint is unchanged), `policy_guard` (runs *after* the model, decides whether a recommendation actually interrupts), `record_decision` and `evidence_fingerprint`, plus `clear_decisions`.
+- **`state/decisions.json`**: the decision store, written by the Telegram buttons and read on the next run.
+
+**Delivery**
+
+- **`telegram_out.py`**: the briefing builder, funnel header, numbered finding cards, inline buttons with a run-stamped `callback_data`, and the auto-suppressed block.
+- **`bot.py`**: the long-running Telegram application. Unprompted push at startup, `/run` to re-trigger inside the same process, button handling with stale-run refusal, and `--replay`.
+- **`dashboard.py`**: renders the real run into `docs/index.html`. The shell existed before the event as `[placeholder]` text; every value on the live page is produced by this file.
+
+**Corrected during the build**
+
+- The bucket definition changed mid-build. Deployment evidence was originally specified as a bucket and is now an orthogonal boolean, because a repo pushed yesterday with a Dockerfile is not the same as one quiet 400 days. `.kiro/specs/observator-clew/requirements.md` and `planning/ARCHITECTURE.md` were corrected to match the code.
+- `what_checked` was originally model-reported and is now owned by code. The loop records every executed fetch and overwrites whatever the model claimed, so the evidence line cannot be fabricated.
+- The model was switched from `gpt-6-astra` to `gpt-5.6-terra` mid-build on cost, after verifying the loop shape, structured outputs, and finding quality held.
+
+**Demo tooling, not product**
+
+- `/reset` (in `bot.py`) empties the decision store between recording takes. It touches `state/decisions.json` only. It exists so a second run can be demonstrated from a clean state and is not part of the agent's behavior.
 
 ## Stack
 
-Python, `python-telegram-bot` (async), OpenAI SDK with structured outputs (model: `gpt-6-astra`), GitHub REST API, GitHub Pages for the Estate Overview page.
+Python, `python-telegram-bot` (async), OpenAI SDK with structured outputs (model: `gpt-5.6-terra`, via `/v1/responses`), GitHub REST API, GitHub Pages for the Estate Overview page.
 
 ## Decisions worth stating
 
