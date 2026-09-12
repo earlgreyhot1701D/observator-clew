@@ -91,3 +91,5 @@ Python, `python-telegram-bot` (async), OpenAI SDK with structured outputs (model
 ## Scope, honestly
 
 This is a hackathon artifact. Single user, single GitHub estate, credentials in a local `.env`, no auth, no multi-tenancy, and the decision store is a JSON file. Read-only against GitHub by design: it has no write access and proposes no destructive action. `planning/WIND-DOWN.md` states what happens to this repo after the event, including the dormancy threshold, which was written before any of the code existed.
+
+`has_deployment_evidence` is true when a deploy config file is present **or** when any GitHub Actions workflow exists. A lint workflow is not a deployment, so this check is deliberately generous: it is a reason to look, not a claim that something is deployed. The finding then reports what the evidence actually showed. Related: the evidence fingerprint in `guard.py` tracks deploy config files but not workflow changes, so a repository signaled only by a workflow carries a coarser fingerprint than one signaled by a Dockerfile.

@@ -22,3 +22,6 @@ node_modules/
 Thumbs.db
 .vscode/
 .idea/
+
+# Working docs, not part of the build
+Claude outputs/

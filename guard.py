@@ -95,7 +95,7 @@ def persistence_guard(candidates, snapshot):
             if current == stored.get("evidence_fingerprint"):
                 decided_date = (stored.get("decided_at") or "")[:10]
                 auto_suppressed_notes.append(
-                    f"{full}: No action, {decided_date} \u2014 evidence unchanged"
+                    f"{full}: No action, {decided_date} (evidence unchanged)"
                 )
                 continue
         to_investigate.append(cand)

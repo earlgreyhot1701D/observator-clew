@@ -86,8 +86,8 @@ def _finding_card(finding):
         "          <div class=\"label\">WHAT I CAN'T KNOW</div>\n"
         f'          <div class="value">{_esc(finding.what_cant_know)}</div>\n'
         "        </div>\n"
-        f'        <div class="reco">Recommendation: {_esc(finding.recommendation)} '
-        f"\u2014 {_esc(finding.recommendation_reason)}</div>\n"
+        f'        <div class="reco">Recommendation: {_esc(finding.recommendation)}'
+        f". {_esc(finding.recommendation_reason)}</div>\n"
         "      </div>"
     )
 
@@ -116,7 +116,7 @@ def _quiet_section(run_result):
 
     if run_result.suppressed:
         rows = "\n".join(
-            f'      <div class="value">{_esc(f.repo)} \u2014 '
+            f'      <div class="value">{_esc(f.repo)}: '
             f"{_esc(f.recommendation_reason)}</div>"
             for f in run_result.suppressed
         )
@@ -148,7 +148,7 @@ def render_html(run_result):
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Observator Clew — Estate Overview</title>
+  <title>Observator Clew: Estate Overview</title>
   <style>
 {STYLE}
   </style>
