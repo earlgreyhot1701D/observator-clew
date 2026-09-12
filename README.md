@@ -8,23 +8,54 @@ Observator watches one person's GitHub estate and decides what actually needs th
 
 Built solo by La Shara Cordero at the AI Tinkerers "Agents, Everywhere" hackathon, Sep 12, 2026.
 
+Repo: https://github.com/earlgreyhot1701D/observator-clew
+
+Estate Overview (live): https://earlgreyhot1701d.github.io/observator-clew/
+
 ## How it works
 
-A deterministic layer scans the estate and flags candidates worth a closer look. An agent investigates only those candidates, requesting evidence it actually needs, and recommends SURFACE or SUPPRESS with a reason either way. A persistence guard checks prior decisions before the agent is ever called again, so a repo you've already said "no action" on stays quiet unless something material changes.
+A deterministic layer scans the estate and flags candidates worth a closer look, based on how long a repo has been quiet and what signals are present. An agent investigates only those candidates, requesting evidence it actually needs, and recommends SURFACE or SUPPRESS with a reason either way. A persistence guard checks prior decisions before the agent is ever called again, so a repo you've already said "no action" on stays quiet unless something material changes (a new commit, a reopened issue, a new deploy file).
 
-Every finding, surfaced or suppressed, comes with four things: why it surfaced, what was checked, what was found, and what can't be known from the data alone. Unknown is a legitimate answer here, not a failure.
+Every finding the agent reasons about, surfaced or suppressed, comes with four things: why it surfaced, what was checked, what was found, and what can't be known from the data alone. Unknown is a legitimate answer here, not a failure. A repo you have already declined, whose evidence has not changed, never reaches the agent at all: it is skipped by the persistence guard and gets a one-line note saying so, not a full finding. That is the point of the guard, and it is why the funnel counts are worth reading. The agent never proposes archiving, deleting, or modifying anything. It surfaces evidence and a recommendation; the human decides.
+
+The funnel is the honesty check: `{observed} observed · {signaled} signaled · {investigated} investigated · {surfaced} surfaced`. It's on every Telegram message and the Estate Overview page, so it's never hidden how many repos didn't make it to a human.
 
 ## Prepared before the event
 
-Per the hackathon rules, existing templates, prompts, and starter tooling are allowed before build day; core functionality is not. Here's what's pre-existing and what's new tomorrow.
+Per the hackathon rules, existing templates, prompts, and starter code are allowed before build day; the project and its core functionality must be built during the event. Here's exactly what existed going in, so it's easy to point at the diff tomorrow and say what's new.
 
-- `estate-snapshot.json` — a GitHub estate snapshot, collected Sep 10. Structural data only, not analyzed or used to pre-select findings.
-- `snapshot_estate.py` — the data collection script that produced it.
-- `branding/` — visual identity assets.
-- `docs/index.html` — an empty page shell with placeholder content only, no real data or logic.
-- `planning/` — scoping, review, and architecture documents.
-- `prompts/` — the system prompt, output schema spec, and Telegram message templates the agent will use. Prompts are allowed as prep; the code that invokes them is not.
+- **`estate-snapshot.json`**: a structural GitHub estate snapshot (62 repos), collected Sep 10 via `snapshot_estate.py`. Metadata only (push dates, archive status, file presence, issue counts). Not analyzed, not used to pre-select or rank findings, not read before the event.
+- **`snapshot_estate.py`**: the data collection script, using the GitHub REST API with rate-limit backoff.
+- **`branding/`**: locked visual identity. Palette, logo marks, avatar, social assets.
+- **`docs/index.html`**: an empty Estate Overview page shell. Real palette tokens and layout, but every field is a `[placeholder]`. No live data, no JavaScript, no logic. Hosted via GitHub Pages from this folder.
+- **`planning/`**: the scoping, review, and architecture documents that shaped the build (independent evaluation against the judging rubric, scope revisions, and the locked build-day plan).
+- **`prompts/`**: three prepared-text artifacts, not code:
+  - `system_prompt.md`: the agent's three jobs (select candidates, interpret evidence, recommend SURFACE/SUPPRESS with a reason either way), the four-part explainability grammar, and the hard rules (unknown is a legitimate state, inactivity is a signal not a verdict, no destructive suggestions).
+  - `output_schema.md`: the spec for the structured output (`Finding` and `RunResult`) and validation rules, written as a spec so the actual Pydantic model is typed in, not designed, during the event.
+  - `telegram_template.md`: the message templates for the unprompted briefing, button acknowledgments, the quiet-run message, and the locked second-run suppression line.
+- **`.kiro/specs/observator-clew/`**: a hand-written spec (requirements in EARS notation, design, and a task list) prepared the night before and not generated by Kiro. It is a planning document in the same category as the rest of `planning/`. It describes what the code must do; it is not the code, and every task in it was executed during the event.
+- **`.env.example`**: the environment variables the build needs (GitHub token, Telegram bot token and chat ID, OpenAI API key, and model), with no real values.
+
+None of the above performs the agent's job. They're the blueprint and the raw materials; the wiring happens Sep 12.
 
 ## Built during the event
 
-(filled in on Sep 12 — this section will list what was actually built at the hackathon, so anyone can see exactly what's new versus what existed going in.)
+(filled in on Sep 12. This section will list what was actually built at the hackathon: the deterministic triage layer, the agent loop calling the model above, the Telegram bot and button handling, the persistence guard and decision store, and the live Estate Overview data, so anyone can see exactly what's new versus what existed going in.)
+
+## Stack
+
+Python, `python-telegram-bot` (async), OpenAI SDK with structured outputs (model: `gpt-6-astra`), GitHub REST API, GitHub Pages for the Estate Overview page.
+
+## Decisions worth stating
+
+**The memory is a file, not a model feature.** The OpenAI API offers server-side conversation state that persists indefinitely. Observator does not use it. What needs remembering here is not conversation history, it's a human decision paired with an evidence fingerprint, so the next run can answer "has anything materially changed since she said no." That comparison is the product. It also means the persistence guard runs *before* the model is called: a declined finding with unchanged evidence costs zero tokens and never reaches the model at all. Human decisions outrank model judgment by design, and `state/decisions.json` is something you can open and read rather than an opaque object on someone else's server.
+
+**The model does not learn.** Nothing about Observator improves the model. There are no weight updates and no accumulated experience. What improves is the agent's behavior, because the decision store grows and the guard reads it. Any sense that it "learns your preferences" is that file doing its job, and saying so plainly is more useful than implying otherwise.
+
+**The agent loop is bounded.** The model may request evidence at most four times per run, then it judges with what it has. Fetched file contents are treated as untrusted data, not instructions.
+
+**The model decides, code enforces.** The model chooses what to investigate, interprets evidence, and recommends SURFACE or SUPPRESS with a reason either way. Whether that recommendation actually interrupts a human is a deterministic policy guard the model cannot reach. Facts stay with code: dates, counts, file presence, and archive status are established before the model sees them and are never restated differently.
+
+## Scope, honestly
+
+This is a hackathon artifact. Single user, single GitHub estate, credentials in a local `.env`, no auth, no multi-tenancy, and the decision store is a JSON file. Read-only against GitHub by design: it has no write access and proposes no destructive action. `planning/WIND-DOWN.md` states what happens to this repo after the event, including the dormancy threshold, which was written before any of the code existed.

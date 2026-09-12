@@ -61,7 +61,8 @@ Consequences:
 - Use `client.responses.create` for the evidence turns and `client.responses.parse` with `text_format=` for the structured finding. Do not mix in `chat.completions`, even though all three parse methods passed in isolation. One loop, one API, one conversation-state mechanism, one tools shape.
 - Tools use the **flattened** shape on this API: `{"type": "function", "name": ..., "parameters": ...}`, with no nested `"function"` key. The nested form is Chat Completions only.
 - Chain turns with `previous_response_id`. This is within-run conversation state and it is how the loop works. It is **not** the memory layer. Memory across runs stays `state/decisions.json`. Do not confuse the two.
-- Pin `reasoning` effort explicitly rather than taking a default you have not timed. A live run on venue wifi with a judge watching makes latency a demo risk, not just a cost line.
+- Pin `reasoning` effort explicitly rather than taking a default you have not timed. A live run on venue wifi with a judge watching makes latency a demo risk, not just a cost line. Measured Friday: 1.2s at `low`, 1.4s at `medium`, single samples. Use `medium`.
+- **Construct the client with `timeout=20`.** Not optional. Wifi that half-dies hangs rather than erroring, and a hang on camera is worse than an error, because you cannot tell when to cut to `--replay`. One kwarg converts a hang into a fast, visible failure you can recover from.
 
 ### Decision record: plain SDK, no agent framework
 
@@ -97,7 +98,7 @@ Consequences:
 | `main.py` | Entrypoint. Wires the run, handles `--replay`. |
 | `schema.py` | Pydantic models: `Finding`, `RunResult`. Per `prompts/output_schema.md`. |
 | `estate.py` | Loads `estate-snapshot.json`. Nothing else. |
-| `triage.py` | Deterministic buckets. Descriptive names only (`long-quiet`, not `archive-candidate`). |
+| `triage.py` | Deterministic age buckets, mutually exclusive: insufficient-evidence, recently-active, quiet, long-quiet. Descriptive names only, never `archive-candidate`. `has_deployment_evidence` is an orthogonal boolean, NOT a bucket: the signal is quiet AND deployed, which is lost if deployment is its own bucket. Age measured against the snapshot capture date, not wall clock. |
 | `investigate.py` | Executes tool calls the model requests. Live GitHub fetch, snapshot fallback (labeled). |
 | `reason.py` | The model loop. Select, request evidence, interpret, recommend. |
 | `guard.py` | Policy guard + persistence guard. Reads/writes `state/decisions.json`. |
@@ -126,7 +127,7 @@ Start 11:15. **Freeze 2:30.** Phone alarm at 2:25.
 | 0. Hello | 11:15–11:25 | `main.py`, `schema.py` | "Observator online" arrives in Telegram **with a working Estate Overview link in it**, HTML renders, the link opens the placeholder page. Schema imports. |
 | 1. Triage | 11:25–11:55 | `estate.py`, `triage.py` | Bucket counts sum to total repo count. Every repo has a bucket and a one-line deterministic reason. Printed as a table. |
 | 2. Agent | 11:55–12:45 | `investigate.py`, `reason.py` | Model requests at least one `fetch_file`. Fetch executes live. Model sees result and returns validated structured output. Every cited fact exists in the snapshot. |
-| 3. Push | 12:45–1:15 | `telegram_out.py`, `bot.py` | Real briefing arrives. Under 4096 chars. Funnel header correct. Buttons render. **Write `runs/latest.json` and build `--replay` here, the moment the first run succeeds.** |
+| 3. Push | 12:45–1:15 | `telegram_out.py`, `bot.py` | Real briefing arrives. Under 4096 chars. Funnel header correct. Buttons render. **Write `runs/latest.json` and build `--replay` here, the moment the first run succeeds.** Then two more things, both cheap and both protect the closing beat: (a) do one full run, decline, re-run cycle and **save that second result as a separate rehearsed fallback file**, because `--replay` on `latest.json` alone can only resend whatever ran last, which may not be the suppression message the demo needs; (b) smoke-test calling the run function **twice inside one running `Application`** via a bare `/run` handler, confirming the second run fires without a restart. That re-trigger is the only mechanic in the plan never verified against a real API, and the closing beat depends on it. |
 | **1:15 checkpoint** | | | **A real briefing with real findings is in Telegram.** |
 | 4. Decisions | 1:15–1:50 | `guard.py`, `bot.py` | Tap No action → ack message. Decision + evidence fingerprint written. Re-run → that finding is suppressed with the stored reason, and no model call was made for it. |
 | 5. Overview | 1:50–2:10 | `dashboard.py` | `docs/index.html` written with real data, pushed, loads at the Pages URL. |
